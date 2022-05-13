@@ -1,0 +1,11 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#forest-fire-canvas {
+    /* background-color: red; */
+    width: 90vh;
+    height: 90vh;
+}
