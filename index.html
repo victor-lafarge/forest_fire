@@ -11,16 +11,18 @@
     <div>
         <div>
 
-            <input type="range">
+            <label for="frame-speed">vitesse</label>
+            <input id="frame-speed" type="range">
             <label for="canvas-height">Hauteur</label>
             <input id="canvas-height" type="number" value="50">
             <label for="canvas-width">Largeur</label>
             <input id="canvas-width" type="number" value="50">
         </div>
         <div>
-            <input id="proba-fire-input" type="number" step="0.1" value="0.6">
+            <input id="proba-fire-input" type="number" step="0.1" value="0.6" max="1" min="0">
             <button id="next-btn">Next</button>
             <button id="go-to-end-btn">Go to the end</button>
+            <button id="restart-btn">Restart</button>
             
         </div>
     </div>

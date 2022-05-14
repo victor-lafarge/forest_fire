@@ -37,37 +37,58 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
 
     canvas.addEventListener('click', (evt)=> {
-    	let mousePos = getMousePos(evt);
-		console.log("Mouse X : " + mousePos.x + ", Mouse Y : " + mousePos.y);
+    	let mousePos = getMousePos(evt, canvas);
+        let listPos = getListPosition(mousePos, trees, canvas)
+        trees[listPos.x][listPos.y] = 1
+        displayTrees(canvas, ctx, trees)
+        atLeastOneOnFire = true
+		console.log("list X : " + listPos.x, "list Y : " + listPos.y);
     })
-    function getMousePos(evt) {
-		let rect = canvas.getBoundingClientRect();
-		return {
-			x: evt.clientX - rect.left,
-			y: evt.clientY - rect.top
-		};
-	}
+    
 
     let probaInput = document.querySelector('#proba-fire-input')
     
     document.querySelector('#next-btn').addEventListener('click', ()=>{
         [ trees, atLeastOneOnFire] = oneStep(trees, probaInput.value)
         console.log(atLeastOneOnFire)
-        displayTrees(canvas, ctx, trees, width, height)
+        displayTrees(canvas, ctx, trees)
     })
 
+    let frameSpeedMs = 500
+    let interval
+
     document.querySelector('#go-to-end-btn').addEventListener('click', ()=>{
-        let interval = setInterval(()=>{
+        interval = setNewInterval()
+    })
+
+    document.querySelector('#restart-btn').addEventListener('click', () =>{
+        trees = initTreesArray(width, height)
+        displayTrees(canvas, ctx, trees)
+        atLeastOneOnFire = true
+        clearInterval(interval)
+        interval = null
+    })
+
+    let speedInput = document.querySelector('#frame-speed')
+    speedInput.addEventListener('change', ()=>{
+        frameSpeedMs = (100-speedInput.value) *10
+        if(interval) {
+            interval = setNewInterval()
+        }
+    })
+
+    function setNewInterval() {
+        clearInterval(interval)
+        return setInterval(()=>{
             [ trees, atLeastOneOnFire] = oneStep(trees, probaInput.value)
-            displayTrees(canvas, ctx, trees, width, height)
+            displayTrees(canvas, ctx, trees)
             console.log('end');
             if(!atLeastOneOnFire) {
                 clearInterval(interval);
+                interval = null
             }
-        }, 300)
-        
-    })
-
+        }, frameSpeedMs)
+    }
     
 
    
@@ -142,6 +163,21 @@ function oneStep(trees, proba) {
     }
 
     return [newTrees, atLeastOneOnFire]
+}
+
+function getListPosition(mousePos, trees, canvas) {
+    return {
+        x: Math.floor((mousePos.x/canvas.width)*trees.length),
+        y: Math.floor((mousePos.y/canvas.height)*trees[0].length),
+    }
+}
+
+function getMousePos(evt, canvas) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
 }
 
 function getNeighbors(x, y) {
