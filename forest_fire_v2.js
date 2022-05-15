@@ -61,15 +61,35 @@ document.addEventListener('DOMContentLoaded', ()=> {
         playGround.setFrameSpeed(speedInput.value)
     })
 
+    let windActivate = document.querySelector('#wind-is-activate-input')
+    windActivate.addEventListener('input', ()=> {
+        document.querySelector('#arrow-wind-direction').classList.toggle('d-none')
+        if(windActivate.check) {
+
+            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/4
+            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/4
+        } else {
+            playGround.windVector.x = 0
+            playGround.windVector.y = 0
+        } 
+ 
+        console.log(playGround.windVector)
+    })
+
     let windDirectionInput = document.querySelector('#wind-direction-input')
     document.querySelector('#arrow-wind-direction').style.transform = 'rotate(180deg)'
     windDirectionInput.addEventListener('input', ()=> {
         document.querySelector('#arrow-wind-direction').style.transform = 'rotate('+(windDirectionInput.value*3.6+180)+'deg)'
-        playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)
-        playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)
- 
-        console.log(playGround.windVector)
+        if(windActivate.check) {
+
+            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/4
+            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/4
+        }
     })
+
+    
+
+
 })
 
 

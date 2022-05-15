@@ -17,3 +17,7 @@ body {
 #div-arrow-container {
     padding: 30px;
 }
+
+.d-none {
+    display: none;
+}

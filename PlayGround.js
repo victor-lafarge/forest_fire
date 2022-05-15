@@ -41,6 +41,8 @@ class PlayGroud {
         y: 0
     }
 
+    DISTANCE_TREE_TARGETED = 1
+
     constructor(canvas, width, height, propagationProbability) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
@@ -117,7 +119,7 @@ class PlayGroud {
         for(let tree of this.trees) {
             for(let tree2 of this.trees) {
                 if(tree != tree2) {
-                    if(tree.getDistance(tree2)< 3)
+                    if(tree.getDistance(tree2) <= this.DISTANCE_TREE_TARGETED)
                         tree.neighbors.push(tree2)
                 }
             }
@@ -228,8 +230,8 @@ class PlayGroud {
     //function to return randomly if a tree in on fire
     //-------------------------------------------------------------------------------------------
     onFire(distance) {
-        console.log( 1/(distance+1))
-        return 1-(Math.random() * 1/(distance+1)) > this.propagationProbability ? 1 : 0
+        console.log((Math.random() * 1/(Math.exp(distance+1))))
+        return 1-(Math.random() * 1/(Math.exp(distance-1))) < this.propagationProbability ? 1 : 0
     }
 
 }
