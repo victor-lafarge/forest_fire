@@ -1,3 +1,23 @@
+class Tree {
+    x
+    y
+    burn = 0
+    neighbors = []
+
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+    }
+
+    getDistance(tree) {
+        return Math.sqrt(Math.pow(this.x-tree.x, 2)+Math.pow(this.y-tree.y, 2))
+    }
+
+    getDistanceWithWind(tree, wind) {
+        return Math.sqrt(Math.pow(this.x-tree.x+wind.x, 2)+Math.pow(this.y+wind.y-tree.y, 2))
+    }
+}
+
 class PlayGroud {
 
     canvas
@@ -16,13 +36,17 @@ class PlayGroud {
     goToTheEndInterval = null
     frameSpeedMs
 
-    constructor(canvas, width, height, propagationProbability, frameSpeedMs) {
+    windVector = {
+        x: 0,
+        y: 0
+    }
+
+    constructor(canvas, width, height, propagationProbability) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
 
         this.width = width
         this.height = height
-        this.frameSpeedMs = frameSpeedMs
 
         this.propagationProbability = propagationProbability
 
@@ -86,14 +110,15 @@ class PlayGroud {
             }
         }
         this.setNeighbors()
+
     }
 
     setNeighbors() {
         for(let tree of this.trees) {
             for(let tree2 of this.trees) {
                 if(tree != tree2) {
-                    if(Math.abs(tree.x - tree2.x) + Math.abs(tree.y - tree2.y) <= 1)
-                    tree.neighbors.push(tree2)
+                    if(tree.getDistance(tree2)< 3)
+                        tree.neighbors.push(tree2)
                 }
             }
         }
@@ -137,6 +162,7 @@ class PlayGroud {
     toggleBurningTree(evt) {
 
         let position = this.getTreePositionFromPixelsPosition(this.getMousePos(evt))
+        console.log(position)
         let tree = this.trees.find(tree => tree.x == position.x && tree.y == position.y)
         if(tree.burn == 0) {
             tree.burn = 1
@@ -185,7 +211,7 @@ class PlayGroud {
             for(let neighbor of tree.neighbors) {
                     if(neighbor.burn == 0) {
 
-                        let burn = this.onFire()
+                        let burn = this.onFire(tree.getDistanceWithWind(neighbor, this.windVector))
                         if(burn == 1) {
                             neighbor.burn = burn
                             waitingBurningTrees.push(neighbor)
@@ -201,8 +227,9 @@ class PlayGroud {
     //-------------------------------------------------------------------------------------------
     //function to return randomly if a tree in on fire
     //-------------------------------------------------------------------------------------------
-    onFire() {
-        return Math.random() < this.propagationProbability ? 1 : 0
+    onFire(distance) {
+        console.log( 1/(distance+1))
+        return 1-(Math.random() * 1/(distance+1)) > this.propagationProbability ? 1 : 0
     }
 
 }

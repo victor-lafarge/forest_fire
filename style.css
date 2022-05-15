@@ -9,3 +9,11 @@ body {
     width: 90vh;
     height: 90vh;
 }
+
+#arrow-wind-direction {
+    width: 100px
+}
+
+#div-arrow-container {
+    padding: 30px;
+}

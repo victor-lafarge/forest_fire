@@ -1,17 +1,5 @@
 const COLORS = ['green', 'red', 'gray']
 
-class Tree {
-    x
-    y
-    burn = 0
-    neighbors = []
-
-    constructor(x, y) {
-        this.x = x
-        this.y = y
-    }
-}
-
 document.addEventListener('DOMContentLoaded', ()=> {
 
 
@@ -22,7 +10,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     let speedInput = document.querySelector('#frame-speed')
 
 
-    let playGround = new PlayGroud(canvas, inputHeight.value, inputWidth.value, propagationProbabilityInput.value, speedInput.value)
+    let playGround = new PlayGroud(canvas, inputHeight.value, inputWidth.value, propagationProbabilityInput.value)
 
     console.log(playGround)
     window.addEventListener('resize', playGround.initCanvas)
@@ -71,6 +59,16 @@ document.addEventListener('DOMContentLoaded', ()=> {
     //spped change speed between steps
     speedInput.addEventListener('change', ()=>{
         playGround.setFrameSpeed(speedInput.value)
+    })
+
+    let windDirectionInput = document.querySelector('#wind-direction-input')
+    document.querySelector('#arrow-wind-direction').style.transform = 'rotate(180deg)'
+    windDirectionInput.addEventListener('input', ()=> {
+        document.querySelector('#arrow-wind-direction').style.transform = 'rotate('+(windDirectionInput.value*3.6+180)+'deg)'
+        playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)
+        playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)
+ 
+        console.log(playGround.windVector)
     })
 })
 
