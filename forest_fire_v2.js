@@ -19,9 +19,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     let inputHeight = document.querySelector('#canvas-height')
     let inputWidth = document.querySelector('#canvas-width')
     let propagationProbabilityInput = document.querySelector('#proba-fire-input')
+    let speedInput = document.querySelector('#frame-speed')
 
 
-    let playGround = new PlayGroud(canvas, inputHeight.value, inputWidth.value, propagationProbabilityInput.value)
+    let playGround = new PlayGroud(canvas, inputHeight.value, inputWidth.value, propagationProbabilityInput.value, speedInput.value)
 
     console.log(playGround)
     window.addEventListener('resize', playGround.initCanvas)
@@ -62,9 +63,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
         playGround.restart()
     })
 
+    //restart everything
+    document.querySelector('#clear-btn').addEventListener('click', () =>{
+        playGround.initDisplayTrees()
+    })
+
     //spped change speed between steps
-    let speedInput = document.querySelector('#frame-speed')
-    playGround.setFrameSpeed(speedInput.value)
     speedInput.addEventListener('change', ()=>{
         playGround.setFrameSpeed(speedInput.value)
     })

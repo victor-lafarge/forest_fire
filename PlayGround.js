@@ -16,28 +16,34 @@ class PlayGroud {
     goToTheEndInterval = null
     frameSpeedMs
 
-    constructor(canvas, width, height, propagationProbability) {
+    constructor(canvas, width, height, propagationProbability, frameSpeedMs) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
 
         this.width = width
         this.height = height
+        this.frameSpeedMs = frameSpeedMs
 
         this.propagationProbability = propagationProbability
 
         this.initCanvas()
-        this.restart()
+        this.initTreesArray()
+        this.initDisplayTrees()
         
     }
 
     restart() {
         this.burningTrees = []
-        this.initTreesArray()
-        this.initDisplayTrees()
         if(this.goToTheEndInterval) {
             clearInterval(this.goToTheEndInterval)
             this.goToTheEndInterval = null
         }
+        this.trees.forEach((tree) => {
+            if(tree.burn != 0) {
+                tree.burn = 0
+                this.displayTree(tree)
+            }
+        })
     }
 
     setFrameSpeed(speedInputValue) {
