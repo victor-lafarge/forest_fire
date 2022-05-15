@@ -1,9 +1,6 @@
-const tileSize = 40
 const COLORS = ['green', 'red', 'gray']
 
-
 document.addEventListener('DOMContentLoaded', ()=> {
-
 
 
     let canvas =  document.querySelector("#forest-fire-canvas")
@@ -39,10 +36,17 @@ document.addEventListener('DOMContentLoaded', ()=> {
     canvas.addEventListener('click', (evt)=> {
     	let mousePos = getMousePos(evt, canvas);
         let listPos = getListPosition(mousePos, trees, canvas)
-        trees[listPos.x][listPos.y] = 1
+        console.log(listPos, trees[listPos.x][listPos.y] == 0)
+        if(trees[listPos.x][listPos.y] == 0) {
+            trees[listPos.x][listPos.y] = 1
+            atLeastOneOnFire = true
+            console.log(listPos, trees[listPos.x][listPos.y] == 0)
+
+        } else {
+            trees[listPos.x][listPos.y] = 0
+        }
+
         displayTrees(canvas, ctx, trees)
-        atLeastOneOnFire = true
-		console.log("list X : " + listPos.x, "list Y : " + listPos.y);
     })
     
 
@@ -82,16 +86,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
         return setInterval(()=>{
             [ trees, atLeastOneOnFire] = oneStep(trees, probaInput.value)
             displayTrees(canvas, ctx, trees)
-            console.log('end');
             if(!atLeastOneOnFire) {
                 clearInterval(interval);
                 interval = null
             }
         }, frameSpeedMs)
     }
-    
-
-   
 })
 
 function initCanvas(canvas) {
@@ -131,6 +131,38 @@ function displayTrees(canvas, ctx, trees) {
             ctx.closePath();
         }
     }
+}
+
+function oneStep(trees, proba) {
+    let newTrees = initTreesArray(trees.length, trees[0].length, false)
+    let atLeastOneOnFire = false
+    for(let x in trees) {
+        x= parseInt(x)
+        for (let y in trees[x]) {
+            y = parseInt(y)
+            if(newTrees[x][y] == 0)
+            {
+                newTrees[x][y] = trees[x][y]
+                if(trees[x][y] == 1) {
+                    newTrees[x][y] = 2
+                    for(let neighbor of getNeighbors(x, y)) {
+                        let x2 = neighbor[0]
+                        let y2 = neighbor[1]
+                        if(x2 >= 0 && y2 >= 0 && x2 < trees.length && y2 < trees[0].length) {
+                            if(trees[x2][y2] == 0) {
+                                let fire = onFire(proba)
+                                newTrees[x2][y2] = fire
+                                if(fire == 1) 
+                                    atLeastOneOnFire = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return [newTrees, atLeastOneOnFire]
 }
 
 function oneStep(trees, proba) {
