@@ -64,10 +64,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     let windActivate = document.querySelector('#wind-is-activate-input')
     windActivate.addEventListener('input', ()=> {
         document.querySelector('#arrow-wind-direction').classList.toggle('d-none')
-        if(windActivate.check) {
+        if(windActivate.checked) {
 
-            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/4
-            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/4
+            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/2
+            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/2
         } else {
             playGround.windVector.x = 0
             playGround.windVector.y = 0
@@ -80,10 +80,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector('#arrow-wind-direction').style.transform = 'rotate(180deg)'
     windDirectionInput.addEventListener('input', ()=> {
         document.querySelector('#arrow-wind-direction').style.transform = 'rotate('+(windDirectionInput.value*3.6+180)+'deg)'
-        if(windActivate.check) {
+        if(windActivate.checked) {
 
-            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/4
-            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/4
+            playGround.windVector.x = Math.cos((windDirectionInput.value * Math.PI*2)/100)/2
+            playGround.windVector.y = Math.sin((windDirectionInput.value * Math.PI*2)/100)/2
         }
     })
 
