@@ -41,7 +41,7 @@ class PlayGroud {
         y: 0
     }
 
-    DISTANCE_TREE_TARGETED = 1
+    DISTANCE_TREE_TARGETED = 3
 
     constructor(canvas, width, height, propagationProbability) {
         this.canvas = canvas
